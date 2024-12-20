@@ -1,7 +1,6 @@
-﻿using ElectricityAnalysis.Analysis;
-using ElectricityAnalysis.Models;
+﻿using ElectricityAnalysis.Models;
 
-namespace ElectricityAnalysis.Data;
+namespace ElectricityAnalysis.Csv;
 
 public interface ICsvWriter
 {

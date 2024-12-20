@@ -1,6 +1,6 @@
 ﻿using ElectricityAnalysis;
 using ElectricityAnalysis.Analysis;
-using ElectricityAnalysis.Data;
+using ElectricityAnalysis.Csv;
 using ElectricityAnalysis.Integrations.Price;
 using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Configuration;

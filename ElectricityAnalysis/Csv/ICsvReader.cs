@@ -1,6 +1,6 @@
 ﻿using ElectricityAnalysis.Models;
 
-namespace ElectricityAnalysis.Data;
+namespace ElectricityAnalysis.Csv;
 
 public interface ICsvReader
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ElectricityAnalysis.Data;
+namespace ElectricityAnalysis.Csv;
 
-public record CsvConfiguration()
+public record CsvConfiguration
 {
     public const string SectionName = "Csv";
     public required string DataDirectoryPath { get; init; }

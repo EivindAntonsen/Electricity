@@ -12,7 +12,6 @@ public class ElectricityAnalyzer : IElectricityAnalyzer
             join hourlyPrice in hourlyPriceDatas
                 on meteringValue.TimeStart equals hourlyPrice.TimeStart
             select new HourlyStats(
-                meteringValue.TimeStart.Hour,
                 meteringValue.TimeStart,
                 meteringValue.TimeStart.DayOfWeek.ToString(),
                 meteringValue.TimeStart.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Friday or DayOfWeek.Sunday,

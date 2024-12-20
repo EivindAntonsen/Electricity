@@ -3,7 +3,7 @@ using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ElectricityAnalysis.Data;
+namespace ElectricityAnalysis.Csv;
 
 public class CsvReader(
     IOptions<CsvConfiguration> config,
