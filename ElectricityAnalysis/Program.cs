@@ -1,4 +1,5 @@
 ﻿using ElectricityAnalysis;
+using ElectricityAnalysis.Analysis;
 using ElectricityAnalysis.Data;
 using ElectricityAnalysis.Integrations.Price;
 using ElectricityAnalysis.Models;
@@ -30,18 +31,27 @@ var host = Host
         services.AddSingleton<ICsvWriter, CsvWriter>();
         services.AddSingleton<IBeneficialAppsIntegration, BeneficialAppsIntegration>();
         services.AddSingleton<IPriceDataAccess, PriceDataAccess>();
+        services.AddSingleton<IElectricityAnalyzer, ElectricityAnalyzer>();
     })
     .Build();
 
 var csvReader = host.Services.GetRequiredService<ICsvReader>();
 var csvWriter = host.Services.GetRequiredService<ICsvWriter>();
 var priceDataAccess = host.Services.GetRequiredService<IPriceDataAccess>();
+var electricityAnalyzer = host.Services.GetRequiredService<IElectricityAnalyzer>();
 
-var usageData = csvReader
+var meteringValues = csvReader
     .GetMeteringValues()
     .OrderBy(value => value.TimeStart)
     .ToList();
-var hourlyPriceDatas = await priceDataAccess
-    .GetHourlyElectricityPrices(ElectricityPriceArea.Oslo);
+var hourlyPrices = (await priceDataAccess
+    .GetHourlyElectricityPrices(ElectricityPriceArea.Oslo))
+    .ToList();
 
-await csvWriter.WriteHourlyPriceDataAsync(hourlyPriceDatas);
+// todo - skip serialization when new content is the same as old content
+await csvWriter.WriteHourlyPriceDataAsync(hourlyPrices);
+
+var hourlyStats = electricityAnalyzer
+    .CalculateHourlyStats(meteringValues, hourlyPrices)
+    .ToList();
+await csvWriter.WriteHourlyStatsAsync(hourlyStats);

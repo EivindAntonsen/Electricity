@@ -25,6 +25,6 @@ public record HourlyStats(
         .Append(Season).Append(Delimiter)
         .Append(KwhConsumption).Append(Delimiter)
         .Append(NokPerKwh).Append(Delimiter)
-        .Append(ExchangeRate).AppendLine()
+        .Append(ExchangeRate)
         .ToString();
 };
