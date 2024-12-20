@@ -2,7 +2,7 @@
 using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Logging;
 
-namespace ElectricityAnalysis.Integrations;
+namespace ElectricityAnalysis.Integrations.Price;
 
 public class BeneficialAppsIntegration(
     ILogger<BeneficialAppsIntegration> logger

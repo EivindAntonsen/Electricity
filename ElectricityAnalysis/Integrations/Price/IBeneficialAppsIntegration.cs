@@ -1,6 +1,6 @@
 ﻿using ElectricityAnalysis.Models;
 
-namespace ElectricityAnalysis.Integrations;
+namespace ElectricityAnalysis.Integrations.Price;
 
 public interface IBeneficialAppsIntegration
 {

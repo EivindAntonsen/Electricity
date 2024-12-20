@@ -1,4 +1,4 @@
-﻿namespace ElectricityAnalysis.Analysis;
+﻿namespace ElectricityAnalysis.Models;
 
 public enum Season
 {
@@ -10,7 +10,7 @@ public enum Season
 
 public static class SeasonExtensions
 {
-    public static Season FromInt(this int value) =>
+    public static Season ToSeason(this int value) =>
         value switch
         {
             12 or 1 or 2 => Season.Winter,

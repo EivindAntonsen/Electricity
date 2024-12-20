@@ -1,3 +1,3 @@
 ﻿namespace ElectricityAnalysis.Models;
 
-public record MeteringValue(DateTime Start, DateTime End, decimal Value, bool Success);
+public record MeteringValue(DateTime TimeStart, DateTime TimeEnd, decimal Value, bool Success);

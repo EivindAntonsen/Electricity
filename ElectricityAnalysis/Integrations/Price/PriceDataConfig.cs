@@ -1,8 +1,7 @@
-﻿using System.Globalization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ElectricityAnalysis;
+namespace ElectricityAnalysis.Integrations.Price;
 
 public record PriceDataConfig
 {

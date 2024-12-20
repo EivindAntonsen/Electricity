@@ -1,6 +1,6 @@
 ﻿using ElectricityAnalysis.Models;
 
-namespace ElectricityAnalysis;
+namespace ElectricityAnalysis.Integrations.Price;
 
 public interface IPriceDataAccess
 {

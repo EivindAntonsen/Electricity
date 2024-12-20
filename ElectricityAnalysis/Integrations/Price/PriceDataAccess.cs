@@ -1,11 +1,10 @@
 ﻿using System.Globalization;
 using ElectricityAnalysis.Data;
-using ElectricityAnalysis.Integrations;
 using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ElectricityAnalysis;
+namespace ElectricityAnalysis.Integrations.Price;
 
 public class PriceDataAccess(
     IOptions<PriceDataConfig> config,

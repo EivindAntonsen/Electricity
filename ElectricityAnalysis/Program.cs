@@ -1,6 +1,6 @@
 ﻿using ElectricityAnalysis;
 using ElectricityAnalysis.Data;
-using ElectricityAnalysis.Integrations;
+using ElectricityAnalysis.Integrations.Price;
 using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +39,7 @@ var priceDataAccess = host.Services.GetRequiredService<IPriceDataAccess>();
 
 var usageData = csvReader
     .GetMeteringValues()
-    .OrderBy(value => value.Start)
+    .OrderBy(value => value.TimeStart)
     .ToList();
 var hourlyPriceDatas = await priceDataAccess
     .GetHourlyElectricityPrices(ElectricityPriceArea.Oslo);

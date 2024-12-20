@@ -10,6 +10,7 @@ public record CsvConfiguration()
     public required string DateFormat { get; init; }
     public required string SuccessfulReadValue { get; init; }
     public required string PriceDataFileName { get; init; }
+    public required string HourlyStatsFileName { get; init; }
 };
 
 public static class CsvConfigurationExtensions
