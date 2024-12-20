@@ -18,9 +18,9 @@ public record HourlyPriceData(
     private char Delimiter { get; } = ';';
 
     public string ToCsvRow() =>
-        $"{NokPerKWh}{Delimiter}" +
-        $"{EurPerKWh}{Delimiter}" +
-        $"{ExchangeRate}{Delimiter}" +
+        $"{NokPerKWh:N}{Delimiter}" +
+        $"{EurPerKWh:N}{Delimiter}" +
+        $"{ExchangeRate:00.00}{Delimiter}" +
         $"{TimeStart:dd.MM.yyyy HH:mm}{Delimiter}" +
         $"{TimeEnd:dd.MM.yyyy HH:mm}";
 };

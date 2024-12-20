@@ -4,10 +4,6 @@ namespace ElectricityAnalysis.Integrations.Price;
 
 public interface IBeneficialAppsIntegration
 {
-    Task<List<HourlyPriceData>> GetAllHourlyElectricityPricesAsync(
-        ElectricityPriceArea area,
-        CancellationToken cancellationToken);
-
     Task<IEnumerable<HourlyPriceData>> GetElectricityPriceAsync(
         int year,
         int month,

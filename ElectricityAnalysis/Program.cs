@@ -40,10 +40,6 @@ var csvWriter = host.Services.GetRequiredService<ICsvWriter>();
 var priceDataAccess = host.Services.GetRequiredService<IPriceDataAccess>();
 var electricityAnalyzer = host.Services.GetRequiredService<IElectricityAnalyzer>();
 
-var meteringValues = csvReader
-    .GetMeteringValues()
-    .OrderBy(value => value.TimeStart)
-    .ToList();
 var hourlyPrices = (await priceDataAccess
     .GetHourlyElectricityPrices(ElectricityPriceArea.Oslo))
     .ToList();
@@ -51,7 +47,13 @@ var hourlyPrices = (await priceDataAccess
 // todo - skip serialization when new content is the same as old content
 await csvWriter.WriteHourlyPriceDataAsync(hourlyPrices);
 
+var meteringValues = csvReader
+    .GetMeteringValues()
+    .OrderBy(value => value.TimeStart)
+    .ToList();
+
 var hourlyStats = electricityAnalyzer
     .CalculateHourlyStats(meteringValues, hourlyPrices)
     .ToList();
+
 await csvWriter.WriteHourlyStatsAsync(hourlyStats);
