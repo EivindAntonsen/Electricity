@@ -22,4 +22,59 @@ public class ElectricityAnalyzer : IElectricityAnalyzer
 
         return hourlyStats;
     }
+
+    public void GetHourlyHighsByDate()
+    {
+        
+    }
+
+    public void GetHourlyLowsByDate()
+    {
+        
+    }
+
+    public void GetHourlyHighsByMonth()
+    {
+        
+    }
+
+    public void GetHourlyLowsByMonth()
+    {
+        
+    }
+
+    public void GetHourlyHighsBySeason()
+    {
+        
+    }
+
+    public void GetHourlyLowsBySeason()
+    {
+        
+    }
+    
+    public void GetHourlyHighsByWeekday()
+    {
+            
+    }
+
+    public void GetHourlyLowsByWeekday()
+    {
+        
+    }
+
+    public void GetHourlyLowsByWeekends()
+    {
+        
+    }
+
+    public void GetHourlyHighsByWeekends()
+    {
+        
+    }
+
+    public void GetHourlyHighsByWeekdays()
+    {
+        
+    }
 }
