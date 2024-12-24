@@ -6,18 +6,18 @@ using Microsoft.Extensions.Options;
 
 namespace ElectricityAnalysis.Integrations.Price;
 
-public class PriceDataAccess(
+public class PriceDataProvider(
     IOptions<PriceDataConfig> config,
-    IBeneficialAppsIntegration beneficialAppsIntegration,
+    IPriceDataApi priceDataApi,
     ICsvReader csvReader,
-    ILogger<PriceDataAccess> logger)
+    ILogger<PriceDataProvider> logger)
     : IPriceDataAccess
 {
     private readonly PriceDataConfig _config = config.Value;
     private DateTime? _previousRequest = null;
 
-    public async Task<IEnumerable<HourlyPriceData>> GetHourlyElectricityPrices(
-        ElectricityPriceArea area,
+    public async Task<IEnumerable<PricePoint>> GetHourlyElectricityPrices(
+        PriceArea area,
         CancellationToken cancellationToken)
     {
         logger.LogInformation("Getting electricity price data for {Area} from disk", area);
@@ -26,13 +26,13 @@ public class PriceDataAccess(
         var priceDatasByOffset = (await GetPriceDataFromDiskAsync(cancellationToken))
             .GroupBy(data => (data.TimeStart - firstDate).Days)
             .ToDictionary(
-                datas => datas.Key,
-                datas => datas.AsEnumerable());
-        
+                          datas => datas.Key,
+                          datas => datas.AsEnumerable());
+
         logger.LogInformation("Found {Count} entries on disk", priceDatasByOffset.Count(entry => entry.Value.Any()));
         logger.LogDebug("Verifying price data integrity for each day");
-        
-        var hourlyPriceDatas = new List<HourlyPriceData>();
+
+        var hourlyPriceDatas = new List<PricePoint>();
         for (var offset = 0; offset <= (lastDate - firstDate).Days; offset++)
         {
             logger.LogDebug("Getting electricity price data for {Area} for {Date}", area, offset);
@@ -53,15 +53,13 @@ public class PriceDataAccess(
                 await Task.Delay(TimeSpan.FromMilliseconds(_config.PollingIntervalInMilliseconds).Subtract(timeSincelast.Value), cancellationToken);
             }
             
-            var priceDataFromApi = await beneficialAppsIntegration.GetElectricityPriceAsync(
-                offsetDate.Year,
-                offsetDate.Month,
-                offsetDate.Day,
-                area,
-                cancellationToken);
+            var priceDataFromApi =
+                await priceDataApi.GetElectricityPriceAsync(new DateOnly(offsetDate.Year, offsetDate.Month, offsetDate.Day),
+                                                            area,
+                                                            cancellationToken);
 
             _previousRequest = DateTime.Now;
-            
+
             hourlyPriceDatas.AddRange(priceDataFromApi);
         }
 
@@ -77,7 +75,7 @@ public class PriceDataAccess(
         return (firstDate.Date, lastDate.Date);
     }
 
-    private async Task<IEnumerable<HourlyPriceData>> GetPriceDataFromDiskAsync(CancellationToken cancellationToken = default)
+    private async Task<IEnumerable<PricePoint>> GetPriceDataFromDiskAsync(CancellationToken cancellationToken = default)
     {
         try
         {

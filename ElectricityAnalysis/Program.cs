@@ -29,8 +29,8 @@ var host = Host
         services.AddPriceDataConfiguration(context.Configuration);
         services.AddSingleton<ICsvReader, CsvReader>();
         services.AddSingleton<ICsvWriter, CsvWriter>();
-        services.AddSingleton<IBeneficialAppsIntegration, BeneficialAppsIntegration>();
-        services.AddSingleton<IPriceDataAccess, PriceDataAccess>();
+        services.AddSingleton<IPriceDataApi, PriceDataApi>();
+        services.AddSingleton<IPriceDataAccess, PriceDataProvider>();
         services.AddSingleton<IElectricityAnalyzer, ElectricityAnalyzer>();
     })
     .Build();
@@ -40,12 +40,12 @@ var csvWriter = host.Services.GetRequiredService<ICsvWriter>();
 var priceDataAccess = host.Services.GetRequiredService<IPriceDataAccess>();
 var electricityAnalyzer = host.Services.GetRequiredService<IElectricityAnalyzer>();
 
-var hourlyPrices = (await priceDataAccess
-    .GetHourlyElectricityPrices(ElectricityPriceArea.Oslo))
+var hourlyPriceData = (await priceDataAccess
+    .GetHourlyElectricityPrices(PriceArea.Oslo))
     .ToList();
 
 // todo - skip serialization when new content is the same as old content
-await csvWriter.WriteHourlyPriceDataAsync(hourlyPrices);
+await csvWriter.WriteHourlyPriceDataAsync(hourlyPriceData);
 
 var meteringValues = csvReader
     .GetMeteringValues()
@@ -53,7 +53,7 @@ var meteringValues = csvReader
     .ToList();
 
 var hourlyStats = electricityAnalyzer
-    .CalculateHourlyStats(meteringValues, hourlyPrices)
+    .CalculateHourlyStats(meteringValues, hourlyPriceData)
     .ToList();
 
-await csvWriter.WriteHourlyStatsAsync(hourlyStats);
+await csvWriter.WritePeriodicStatsAsync(hourlyStats);

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using ElectricityAnalysis.Integrations.Price;
 using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -24,7 +25,7 @@ public class CsvReader(
         select new MeteringValue(start, end, value, success);
 
 
-    public async Task<IEnumerable<HourlyPriceData>> GetHourlyPriceDataAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PricePoint>> GetHourlyPriceDataAsync(CancellationToken cancellationToken = default)
     {
         if (!Directory.Exists(_config.DataDirectoryPath))
         {
@@ -42,18 +43,21 @@ public class CsvReader(
                 {
                     var nokPerKwh = decimal.Parse(columns[0], CultureInfo.InvariantCulture);
                     var eurPerKwh = decimal.Parse(columns[1], CultureInfo.InvariantCulture);
+                    
                     if (decimal.TryParse(columns[2], CultureInfo.InvariantCulture, out var exchangeRate))
                     {
-                        var dateEnd = DateTime.ParseExact(columns[4], _config.DateFormat, CultureInfo.InvariantCulture);
-                        var dateStart = DateTime.ParseExact(columns[3], _config.DateFormat, CultureInfo.InvariantCulture);
+                        var timeEnd = DateTime.ParseExact(columns[4], _config.DateFormat, CultureInfo.InvariantCulture);
+                        var timeStart = DateTime.ParseExact(columns[3], _config.DateFormat, CultureInfo.InvariantCulture);
 
-                        return new HourlyPriceData(nokPerKwh, eurPerKwh, exchangeRate, dateStart, dateEnd);   
+                        return new PricePoint(timeEnd, timeStart, exchangeRate, nokPerKwh, eurPerKwh);
                     }
+
                     logger.LogWarning("Could not parse exchange rate: {ExchangeRate}", columns[2]);
                     foreach (var column in columns)
                     {
                         logger.LogWarning("Column: {Column}", column);
                     }
+
                     throw new Exception("Could not parse exchange rate");
                 });
         }

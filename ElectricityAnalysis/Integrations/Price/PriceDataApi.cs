@@ -4,23 +4,21 @@ using Microsoft.Extensions.Logging;
 
 namespace ElectricityAnalysis.Integrations.Price;
 
-public class BeneficialAppsIntegration(
-    ILogger<BeneficialAppsIntegration> logger
-) : IBeneficialAppsIntegration
+public class PriceDataApi(
+    ILogger<PriceDataApi> logger
+) : IPriceDataApi
 {
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly HttpClient _httpClient = new();
 
-    private static Uri GetPriceDataEndpoint(int year, int month, int day, ElectricityPriceArea area) =>
-        new Uri($"https://www.hvakosterstrommen.no/api/v1/prices/{year}/{month:00}-{day:00}_{area.ToAreaCode()}.json", UriKind.Absolute);
+    private static Uri GetPriceDataEndpoint(DateOnly date, PriceArea area) =>
+        new($"https://www.hvakosterstrommen.no/api/v1/prices/{date.Year}/{date.Month:00}-{date.Day:00}_{area.ToAreaCode()}.json", UriKind.Absolute);
 
-    public async Task<IEnumerable<HourlyPriceData>> GetElectricityPriceAsync(
-        int year,
-        int month,
-        int day,
-        ElectricityPriceArea area,
+    public async Task<IEnumerable<PricePoint>> GetElectricityPriceAsync(
+        DateOnly date,
+        PriceArea area,
         CancellationToken cancellationToken = default)
     {
-        var uri = GetPriceDataEndpoint(year, month, day, area);
+        var uri = GetPriceDataEndpoint(date, area);
         logger.LogInformation("Calling price endpoint: {Uri}", uri);
         var httpResponseMessage = await _httpClient.GetAsync(uri, cancellationToken);
 
@@ -32,7 +30,10 @@ public class BeneficialAppsIntegration(
         catch (Exception exception)
         {
             content = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
-            logger.LogError(exception, "Error getting price data for {Year}, {Month}, {Day}. Content: {Content}", year, month, day, content);
+            logger.LogError(exception, 
+                            "Error getting price data for {Date}. Content: {Content}", 
+                            date,
+                            content);
             throw;
         }
 
@@ -41,7 +42,7 @@ public class BeneficialAppsIntegration(
 
         return await httpResponseMessage
                    .Content
-                   .ReadFromJsonAsync<HourlyPriceData[]>(cancellationToken: cancellationToken)
+                   .ReadFromJsonAsync<PricePoint[]>(cancellationToken: cancellationToken)
                ?? [];
     }
 }

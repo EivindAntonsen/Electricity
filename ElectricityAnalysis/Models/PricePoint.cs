@@ -2,20 +2,19 @@
 
 namespace ElectricityAnalysis.Models;
 
-public record HourlyPriceData(
-    [property: JsonPropertyName("NOK_per_kWh")]
-    decimal NokPerKWh,
-    [property: JsonPropertyName("EUR_per_kWh")]
-    decimal EurPerKWh,
-    [property: JsonPropertyName("EXR")] 
-    decimal ExchangeRate,
+public record PricePoint(
+    [property: JsonPropertyName("time_end")]
+    DateTime TimeEnd,
     [property: JsonPropertyName("time_start")]
     DateTime TimeStart,
-    [property: JsonPropertyName("time_end")]
-    DateTime TimeEnd
-)
+    [property: JsonPropertyName("EXR")]
+    decimal ExchangeRate,
+    [property: JsonPropertyName("EUR_per_kWh")]
+    decimal EurPerKWh,
+    [property: JsonPropertyName("NOK_per_kWh")]
+    decimal NokPerKWh)
 {
-    private char Delimiter { get; } = ';';
+    private static char Delimiter => ';';
 
     public string ToCsvRow() =>
         $"{NokPerKWh:N}{Delimiter}" +

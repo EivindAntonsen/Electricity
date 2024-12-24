@@ -4,7 +4,7 @@ namespace ElectricityAnalysis.Integrations.Price;
 
 public interface IPriceDataAccess
 {
-    Task<IEnumerable<HourlyPriceData>> GetHourlyElectricityPrices(
-        ElectricityPriceArea area, 
+    Task<IEnumerable<PricePoint>> GetHourlyElectricityPrices(
+        PriceArea area, 
         CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,5 @@
-﻿using ElectricityAnalysis.Models;
+﻿using ElectricityAnalysis.Integrations.Price;
+using ElectricityAnalysis.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -11,7 +12,7 @@ public class CsvWriter(
 {
     private readonly CsvConfiguration _csvConfig = config.Value;
 
-    public async Task WriteHourlyPriceDataAsync(IEnumerable<HourlyPriceData> priceDatas)
+    public async Task WriteHourlyPriceDataAsync(IEnumerable<PricePoint> priceDatas)
     {
         var rows = priceDatas.Select(data => data.ToCsvRow()).ToList();
         var path = Path.Combine(_csvConfig.DataDirectoryPath, _csvConfig.PriceDataFileName);
@@ -25,7 +26,7 @@ public class CsvWriter(
         logger.LogInformation("Writing done");
     }
 
-    public async Task WriteHourlyStatsAsync(IEnumerable<HourlyStats> stats)
+    public async Task WritePeriodicStatsAsync(IEnumerable<ConsumptionData> stats)
     {
         var rows = stats.Select(stat => stat.ToCsvRow()).ToList();
         var path = Path.Combine(_csvConfig.DataDirectoryPath, _csvConfig.HourlyStatsFileName);
