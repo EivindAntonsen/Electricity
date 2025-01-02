@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using ElectricityAnalysis.Csv;
 
 namespace ElectricityAnalysis.Models;
 
@@ -12,7 +13,7 @@ public record PricePoint(
     [property: JsonPropertyName("EUR_per_kWh")]
     decimal EurPerKWh,
     [property: JsonPropertyName("NOK_per_kWh")]
-    decimal NokPerKWh)
+    decimal NokPerKWh) : ICsvWritable
 {
     private static char Delimiter => ';';
 

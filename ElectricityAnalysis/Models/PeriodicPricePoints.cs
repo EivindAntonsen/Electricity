@@ -1,8 +1,9 @@
 ﻿using System.Text;
+using ElectricityAnalysis.Csv;
 
 namespace ElectricityAnalysis.Models;
 
-public record PeriodicPricePoints : ITimeFrame, IPeriodicPricePoints
+public record PeriodicPricePoints : ITimeFrame, IPeriodicPricePoints, ICsvWritable
 {
     private const char Delimiter = ';';
     public required TimeFrameType TimeFrameType { get; init; }

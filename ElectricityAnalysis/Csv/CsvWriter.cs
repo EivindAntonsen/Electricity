@@ -39,4 +39,19 @@ public class CsvWriter(
         
         logger.LogInformation("Writing done");
     }
+
+
+
+    public async Task WriteCsvAsync(IEnumerable<ICsvWritable> csvWritables, string path)
+    {
+        var rows = csvWritables.Select(writable => writable.ToCsvRow()).ToList();
+
+        logger.LogInformation("Writing {Count} rows to {Path}", rows.Count, path);
+        
+        await using var writer = new StreamWriter(path);
+        foreach (var row in rows) 
+            await writer.WriteLineAsync(row);
+        
+        logger.LogInformation("Writing done");
+    }
 }

@@ -5,12 +5,12 @@ namespace ElectricityAnalysis.Analysis;
 
 public interface IElectricityAnalyzer
 {
-    IEnumerable<ConsumptionData> CalculateHourlyStats(
+    IEnumerable<ConsumptionData> CalculateConsumptionData(
         IEnumerable<MeteringValue> meteringValues,
         IEnumerable<PricePoint> hourlyPriceDatas
     );
 
-    public IEnumerable<PeriodicPricePoints> GetPeriodicPricePointsForTimeFrames(
+    public IEnumerable<PeriodicPricePoints> GetPeriodicPricePointsPerTimeFrame(
         TimeFrameType timeFrameType,
         IEnumerable<MeteringValue> meteringValues,
         IEnumerable<PricePoint> hourlyPriceDatas

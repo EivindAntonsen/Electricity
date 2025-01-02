@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using ElectricityAnalysis.Csv;
 
 namespace ElectricityAnalysis.Models;
 
@@ -11,7 +12,7 @@ public record ConsumptionData(
     decimal? KwhConsumptionAverage,
     decimal? KwhConsumptionMedian,
     decimal NokPerKwh
-) : ITimeFrame
+) : ITimeFrame, ICsvWritable
 {
     private const char Delimiter = ';';
 

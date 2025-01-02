@@ -7,4 +7,5 @@ public interface ICsvWriter
 {
     Task WriteHourlyPriceDataAsync(IEnumerable<PricePoint> priceDatas);
     Task WritePeriodicStatsAsync(IEnumerable<ConsumptionData> stats);
+    Task WriteCsvAsync(IEnumerable<ICsvWritable> csvWritables, string path);
 }
